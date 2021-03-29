@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace CurrencyConverter
 {
@@ -11,12 +13,42 @@ namespace CurrencyConverter
             InitializeComponent();
         }
 
+        private double conversionRate(string fromCurrency, string toCurrency)
+        {
+            var json = "";
+            string rate = "";
+
+            try
+            {
+                string url = string.Format("https://free.currconv.com/api/v7/convert?q={0}_{1}&compact=ultra&apiKey=23130c69688bb36ecf60", fromCurrency.ToUpper(), toCurrency.ToUpper());
+                string key = string.Format("{0}_{1}", fromCurrency.ToUpper(), toCurrency.ToUpper());
+
+                json = new WebClient().DownloadString(url);
+                dynamic stuff = JsonConvert.DeserializeObject(json);
+                rate = stuff[key];
+
+            }
+            catch 
+            {
+                rate = "0";
+            }
+
+            return double.Parse(rate);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem == null)
             {
                 label5.Visible = true;
-                label5.Text = "Choose the currency first";
+                label5.Text = "Choose 'TO' currency first";
+                label5.ForeColor = Color.Red;
+            }
+            else
+            if (comboBox2.SelectedItem == null)
+            {
+                label5.Visible = true;
+                label5.Text = "Choose 'FROM' currency first";
                 label5.ForeColor = Color.Red;
             }
             else
@@ -25,6 +57,7 @@ namespace CurrencyConverter
 
                 if (Curr == "EUR")
                 {
+                    
                     // EUR
 
                     if (string.IsNullOrEmpty(textBox2.Text))
@@ -35,11 +68,12 @@ namespace CurrencyConverter
                     }
                     else
                     {
-                        double amount = double.Parse(textBox2.Text);
-                        amount = amount / 17168;
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
+               
 
                         label5.Visible = false;
-                        label6.Text = "£" + amount.ToString("#0.00");
+                        label6.Text = "£" + result.ToString("#0.00");
                         label6.Visible = true;
                         label4.Visible = true;
                     }
@@ -56,11 +90,116 @@ namespace CurrencyConverter
                     }
                     else
                     {
-                        double amount = double.Parse(textBox2.Text);
-                        amount = amount / 14437;
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
 
                         label5.Visible = false;
-                        label6.Text = "$" + amount.ToString("#0.00");
+                        label6.Text = "$" + result.ToString("#0.00");
+                        label6.Visible = true;
+                        label4.Visible = true;
+                    }
+                }
+                else if (Curr == "IDR")
+                {
+                    // USD
+
+                    if (string.IsNullOrEmpty(textBox2.Text))
+                    {
+                        label5.Visible = true;
+                        label5.Text = "Insert a number";
+                        label5.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
+
+                        label5.Visible = false;
+                        label6.Text = "Rp" + result.ToString("#0.00");
+                        label6.Visible = true;
+                        label4.Visible = true;
+                    }
+                }
+                else if (Curr == "KRW")
+                {
+                    // USD
+
+                    if (string.IsNullOrEmpty(textBox2.Text))
+                    {
+                        label5.Visible = true;
+                        label5.Text = "Insert a number";
+                        label5.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
+
+                        label5.Visible = false;
+                        label6.Text = "₩" + result.ToString("#0.00");
+                        label6.Visible = true;
+                        label4.Visible = true;
+                    }
+                }
+                else if (Curr == "RMB")
+                {
+                    // USD
+
+                    if (string.IsNullOrEmpty(textBox2.Text))
+                    {
+                        label5.Visible = true;
+                        label5.Text = "Insert a number";
+                        label5.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
+
+                        label5.Visible = false;
+                        label6.Text = "元" + result.ToString("#0.00");
+                        label6.Visible = true;
+                        label4.Visible = true;
+                    }
+                }
+                else if (Curr == "JPY")
+                {
+                    // USD
+
+                    if (string.IsNullOrEmpty(textBox2.Text))
+                    {
+                        label5.Visible = true;
+                        label5.Text = "Insert a number";
+                        label5.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
+
+                        label5.Visible = false;
+                        label6.Text = "¥" + result.ToString("#0.00");
+                        label6.Visible = true;
+                        label4.Visible = true;
+                    }
+                }
+                else if (Curr == "GBP")
+                {
+                    // USD
+
+                    if (string.IsNullOrEmpty(textBox2.Text))
+                    {
+                        label5.Visible = true;
+                        label5.Text = "Insert a number";
+                        label5.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        double rate = conversionRate(comboBox2.Text, comboBox1.Text);
+                        double result = double.Parse(textBox2.Text) * rate;
+
+                        label5.Visible = false;
+                        label6.Text = "£" + result.ToString("#0.00");
                         label6.Visible = true;
                         label4.Visible = true;
                     }
@@ -110,5 +249,9 @@ namespace CurrencyConverter
 
         }
 
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
